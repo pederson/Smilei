@@ -1,0 +1,1362 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Synchrotron-like radiation reaction &#8212; Smilei b&#39;v4.2-8-gc60d66d5\n&#39; documentation</title>
+    <link rel="stylesheet" href="_static/smilei_theme.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://www.gitcdn.xyz/repo/mathjax/MathJax/master/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="shortcut icon" href="_static/smileiIcon.ico"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Multiphoton Breit-Wheeler pair creation" href="multiphoton_Breit_Wheeler.html" />
+    <link rel="prev" title="Ionization" href="ionization.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": {
+      scale: 95,
+      availableFonts: ["TeX"]
+    }
+  });
+  </script>
+   
+  </head><body>
+
+<div id="smallScreenMenu" class="off">
+
+    
+    <div class="toctree-smilei">
+        <ul>
+                <li class="outer">
+                    <a href="licence.html">Licence</a>
+                </li>
+                <li class="outer">
+                    <a href="synopsis.html">Synopsis</a>
+                </li>
+                <li class="outer">
+                    <a href="highlights.html">Highlights</a>
+                </li>
+                <li class="outer">
+                    <a href="releases.html">Releases</a>
+                </li>
+        </ul>
+        <hr />
+        <ul>
+                <li class="outer">
+                    <a href="units.html">Units</a>
+                </li>
+                <li class="outer">
+                    <a href="algorithms.html">PIC algorithms</a>
+                </li>
+                <li class="outer">
+                    <a href="parallelization.html">Parallelization basics</a>
+                </li>
+                <li class="outer">
+                    <a href="vectorization.html">Vectorization</a>
+                </li>
+                <li class="outer">
+                    <a href="collisions.html">Binary collisions</a>
+                </li>
+                <li class="outer">
+                    <a href="ionization.html">Ionization</a>
+                </li>
+            </ul>
+                <ul>
+<li><a class="reference internal" href="#">Synchrotron-like radiation reaction</a><ul>
+<li><a class="reference internal" href="#continuous-radiation-models">Continuous radiation models</a><ul>
+<li><a class="reference internal" href="#approximated-landau-lifshitz-classical-model">Approximated Landau-Lifshitz classical model</a></li>
+<li><a class="reference internal" href="#corrected-classical-model">Corrected classical model</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#stochastic-schemes">Stochastic schemes</a><ul>
+<li><a class="reference internal" href="#fokker-planck-stochastic-model">Fokker-Planck stochastic model</a></li>
+<li><a class="reference internal" href="#monte-carlo-quantum-model">Monte-Carlo quantum model</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#implementation">Implementation</a><ul>
+<li><a class="reference internal" href="#landau-lifshitz-based-models">Landau-Lifshitz-based models</a></li>
+<li><a class="reference internal" href="#fokker-planck-stochastic-model-of-niel-et-al">Fokker-Planck stochastic model of Niel <em>et al</em>.</a></li>
+<li><a class="reference internal" href="#id16">Monte-Carlo quantum model</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#benchmarks">Benchmarks</a><ul>
+<li><a class="reference internal" href="#counter-propagating-plane-wave-1d">Counter-propagating plane wave, 1D</a></li>
+<li><a class="reference internal" href="#synchrotron-2d">Synchrotron, 2D</a></li>
+<li><a class="reference internal" href="#thin-foil-2d">Thin foil, 2D</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#performances">Performances</a></li>
+<li><a class="reference internal" href="#references">References</a></li>
+</ul>
+</li>
+</ul>
+
+            <ul>
+                <li class="outer">
+                    <a href="multiphoton_Breit_Wheeler.html">Multiphoton Breit-Wheeler pair creation</a>
+                </li>
+                <li class="outer">
+                    <a href="laser_envelope.html">Laser envelope model</a>
+                </li>
+                <li class="outer">
+                    <a href="relativistic_fields_initialization.html">Field initialization for relativistic species</a>
+                </li>
+        </ul>
+        <hr />
+        <ul>
+                <li class="outer">
+                    <a href="installation.html">Install</a>
+                </li>
+                <li class="outer">
+                    <a href="namelist.html">Write a namelist</a>
+                </li>
+                <li class="outer">
+                    <a href="run.html">Run</a>
+                </li>
+                <li class="outer">
+                    <a href="post-processing.html">Post-process</a>
+                </li>
+                <li class="outer">
+                    <a href="contribute.html">Contribute</a>
+                </li>
+        </ul>
+        <hr />
+        <ul>
+                <li class="outer">
+                    <a href="material.html">Publications</a>
+                </li>
+                <li class="outer">
+                    <a href="partners.html">Partners</a>
+                </li>
+                <li class="outer">
+                    <a href="https://smileipic.github.io/tutorials">Smilei tutorials</a>
+                </li>
+        </ul>
+        <hr />
+    </div>
+
+</div>
+<div id="hcontainer">
+    <div id="nav_positioner">
+        <div id="nav">
+            <div id="nav_button" onclick="toggleNav()">
+                Sections
+            </div>
+            <div id="nav_list" class="toctree-smilei">
+                <div id="nav_title"><a href="#">Synchrotron-like radiation reaction</a></div>
+                <ul>
+<li><a class="reference internal" href="#">Synchrotron-like radiation reaction</a><ul>
+<li><a class="reference internal" href="#continuous-radiation-models">Continuous radiation models</a><ul>
+<li><a class="reference internal" href="#approximated-landau-lifshitz-classical-model">Approximated Landau-Lifshitz classical model</a></li>
+<li><a class="reference internal" href="#corrected-classical-model">Corrected classical model</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#stochastic-schemes">Stochastic schemes</a><ul>
+<li><a class="reference internal" href="#fokker-planck-stochastic-model">Fokker-Planck stochastic model</a></li>
+<li><a class="reference internal" href="#monte-carlo-quantum-model">Monte-Carlo quantum model</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#implementation">Implementation</a><ul>
+<li><a class="reference internal" href="#landau-lifshitz-based-models">Landau-Lifshitz-based models</a></li>
+<li><a class="reference internal" href="#fokker-planck-stochastic-model-of-niel-et-al">Fokker-Planck stochastic model of Niel <em>et al</em>.</a></li>
+<li><a class="reference internal" href="#id16">Monte-Carlo quantum model</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#benchmarks">Benchmarks</a><ul>
+<li><a class="reference internal" href="#counter-propagating-plane-wave-1d">Counter-propagating plane wave, 1D</a></li>
+<li><a class="reference internal" href="#synchrotron-2d">Synchrotron, 2D</a></li>
+<li><a class="reference internal" href="#thin-foil-2d">Thin foil, 2D</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#performances">Performances</a></li>
+<li><a class="reference internal" href="#references">References</a></li>
+</ul>
+</li>
+</ul>
+
+            </div>
+        </div>
+    </div>
+    
+    <div class="headercolor">
+    </div>
+    <div class="hpositioner">
+        <div class="header">
+        <div class="logo">
+            <a href="index.html">
+                <img class="logo" src="_static/smileiLogo.svg" alt="Logo" />
+            </a>
+        </div>
+        <div class="menu"
+            id="menu_Overview"
+            
+        >
+            <div id="menuButton_Overview" class="menuButton"
+                 onmouseenter="prepareMenu('menu_Overview')"
+                 onmousedown="event.preventDefault()"
+            >
+                <a href="overview.html">
+                    <span>Overview</span>
+                </a>
+            </div>
+            <div class="off" onmouseleave="leaveMenu('menu_Overview',this)">
+                <div class="toctree-smilei">
+                    <ul>
+                        <li class="outer">
+                            <a href="licence.html">Licence</a>
+                        </li>
+                        <li class="outer">
+                            <a href="synopsis.html">Synopsis</a>
+                        </li>
+                        <li class="outer">
+                            <a href="highlights.html">Highlights</a>
+                        </li>
+                        <li class="outer">
+                            <a href="releases.html">Releases</a>
+                        </li>
+        
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="menu"
+            id="menu_Understand"
+            style="font-weight:bold"
+        >
+            <div id="menuButton_Understand" class="menuButton"
+                 onmouseenter="prepareMenu('menu_Understand')"
+                 onmousedown="event.preventDefault()"
+            >
+                <a href="understand.html">
+                    <span>Understand</span>
+                </a>
+            </div>
+            <div class="off" onmouseleave="leaveMenu('menu_Understand',this)">
+                <div class="toctree-smilei">
+                    <ul>
+                        <li class="outer">
+                            <a href="units.html">Units</a>
+                        </li>
+                        <li class="outer">
+                            <a href="algorithms.html">PIC algorithms</a>
+                        </li>
+                        <li class="outer">
+                            <a href="parallelization.html">Parallelization basics</a>
+                        </li>
+                        <li class="outer">
+                            <a href="vectorization.html">Vectorization</a>
+                        </li>
+                        <li class="outer">
+                            <a href="collisions.html">Binary collisions</a>
+                        </li>
+                        <li class="outer">
+                            <a href="ionization.html">Ionization</a>
+                        </li>
+                        <li >
+                            <a href="#">Synchrotron-like radiation reaction</a>
+                        </li>
+                        <li class="outer">
+                            <a href="multiphoton_Breit_Wheeler.html">Multiphoton Breit-Wheeler pair creation</a>
+                        </li>
+                        <li class="outer">
+                            <a href="laser_envelope.html">Laser envelope model</a>
+                        </li>
+                        <li class="outer">
+                            <a href="relativistic_fields_initialization.html">Field initialization for relativistic species</a>
+                        </li>
+        
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="menu"
+            id="menu_Use"
+            
+        >
+            <div id="menuButton_Use" class="menuButton"
+                 onmouseenter="prepareMenu('menu_Use')"
+                 onmousedown="event.preventDefault()"
+            >
+                <a href="use.html">
+                    <span>Use</span>
+                </a>
+            </div>
+            <div class="off" onmouseleave="leaveMenu('menu_Use',this)">
+                <div class="toctree-smilei">
+                    <ul>
+                        <li class="outer">
+                            <a href="installation.html">Install</a>
+                        </li>
+                        <li class="outer">
+                            <a href="namelist.html">Write a namelist</a>
+                        </li>
+                        <li class="outer">
+                            <a href="run.html">Run</a>
+                        </li>
+                        <li class="outer">
+                            <a href="post-processing.html">Post-process</a>
+                        </li>
+                        <li class="outer">
+                            <a href="contribute.html">Contribute</a>
+                        </li>
+        
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="last menu"
+            id="menu_More"
+            
+        >
+            <div id="menuButton_More" class="menuButton"
+                 onmouseenter="prepareMenu('menu_More')"
+                 onmousedown="event.preventDefault()"
+            >
+                <a href="more.html">
+                    <span>More</span>
+                </a>
+            </div>
+            <div class="off" onmouseleave="leaveMenu('menu_More',this)">
+                <div class="toctree-smilei">
+                    <ul>
+                        <li class="outer">
+                            <a href="material.html">Publications</a>
+                        </li>
+                        <li class="outer">
+                            <a href="partners.html">Partners</a>
+                        </li>
+                        <li class="outer">
+                            <a href="https://smileipic.github.io/tutorials">Smilei tutorials</a>
+                        </li>
+        
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <script type="text/javascript">
+            var es=document.getElementsByClassName("menuButton"), i=0;
+            var evt = "ontouchend" in document ? "touchend" : "click";
+            for( var i=0; i<es.length; i+=1 ) {
+                es[i].addEventListener(evt, function(a){ return function(){toggleMenu(a)};}(es[i].parentNode.id));
+            }
+        </script>
+        
+        <div id="searchbox" role="search" style="display:none">
+            <form class="search" action="search.html" method="get">
+              <input type="text" name="q" placeholder="Search" id="searchinput" />
+              <input type="hidden" name="check_keywords" value="yes" />
+              <input type="hidden" name="area" value="default" />
+            </form>
+        </div>
+        
+        <div id="searchicon" onclick="openSearch()" style="display:block">
+            <svg
+               xmlns="http://www.w3.org/2000/svg"
+               viewBox="0 0 80 120">
+              <g transform="translate(0,-932.36216)" >
+                <circle
+                   r="25" cy="977.51044" cx="38.078663"
+                   style="opacity:1;fill:none;stroke:#ffffff;stroke-width:10;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+                <rect
+                   transform="matrix(0.36717877,0.93015039,-0.93427297,0.35655858,0,0)"
+                   rx="4.9996676" ry="7.4995141"
+                   y="316.16959" x="947.6142"
+                   height="14.117695" width="46.476151"
+                   style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:none;" />
+                <path
+                   d="m 41.383282,962.25996 a 15,15 0 0 1 11.660107,11.6355"
+                   style="opacity:1;fill:none;stroke:#ffffff;stroke-width:3;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+              </g>
+            </svg>
+        </div>
+        <div id="closesearchicon" onclick="closeSearch()" style="display:none">
+            <svg
+               xmlns="http://www.w3.org/2000/svg"
+               viewBox="0 0 80 120">
+              <g
+                 transform="translate(0,-932.36216)">
+                <path
+                   d="m 10,962.36216 60,60.00004"
+                   style="fill:none;stroke:#ffffff;stroke-width:10;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none" />
+                <path
+                   d="M 70,962.36216 10,1022.3622"
+                   style="fill:none;stroke:#ffffff;stroke-width:10;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none" />
+              </g>
+            </svg>
+        </div>
+        
+        <div id="smallScreenMenuButton" onclick="toggleSmallScreenMenu(event)">
+            <svg xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg"
+               viewBox="-20 -20 140 140">
+              <g  style="fill:#ffffff;stroke:none;">
+                <circle cx="15" cy="20" r="5" />
+                <circle cx="35" cy="20" r="5" />
+                <circle cx="85" cy="20" r="5" />
+                <rect width="50" height="10" x="35" y="15" rx="0" ry="0" />
+                <circle cx="15" cy="40" r="5" />
+                <circle cx="35" cy="40" r="5" />
+                <circle cx="85" cy="40" r="5" />
+                <rect width="50" height="10" x="35" y="35" rx="0" ry="0" />
+                <circle cx="15" cy="60" r="5" />
+                <circle cx="35" cy="60" r="5" />
+                <circle cx="85" cy="60" r="5" />
+                <rect width="50" height="10" x="35" y="55" rx="0" ry="0" />
+                <circle cx="15" cy="80" r="5" />
+                <circle cx="35" cy="80" r="5" />
+                <circle cx="85" cy="80" r="5" />
+                <rect width="50" height="10" x="35" y="75" rx="0" ry="0" />
+              </g>
+            </svg>
+        </div>
+        
+    </div>
+    
+</div>
+</div>
+
+    <div class="document">
+    <div class="documentwrapper">
+        <div class="body" role="main">
+          
+  <div class="section" id="synchrotron-like-radiation-reaction">
+<span id="radiationreactionpage"></span><h1>Synchrotron-like radiation reaction<a class="headerlink" href="#synchrotron-like-radiation-reaction" title="Permalink to this headline">¶</a></h1>
+<p>High-energy particles traveling in a strong electromagnetic field lose energy by
+radiation. Depending on the field strength and the particle energy, radiation
+losses pertain to different regimes and occur smoothly or in brutal steps, with
+diffusive and stochastic consequences.
+Physicists usually refer to this phenomenon as <em>synchrotron-like radiation emission</em>
+(in reference to the emission process occurring in synchrotron facilities
+with a constant magnetic field)
+or <em>nonlinear inverse Compton scattering</em> (in an arbitrary electromagnetic field).</p>
+<p>In extremely intense laser fields, with intensities above
+<span class="math notranslate nohighlight">\(10^{21}\ \mathrm{Wcm^{-2}}\)</span>, high-energy radiation emission strongly influences
+the dynamics of charged particles and the overall energy balance of laser-plasma
+interaction.
+In our regime of interaction, only light charge particles such as electrons
+and positrons can radiate.</p>
+<p>Different approaches have been implemented in <strong class="program">Smilei</strong> as summarized
+in <a class="reference internal" href="#radiationregimes"><span class="std std-numref">Table 1</span></a> to deal with different regimes of emission.
+These regimes can be characterized via the quantum Lorentz invariant parameter
+<span class="math notranslate nohighlight">\(\chi\)</span> which is an indicator of how strong is the radiation emission
+process.</p>
+<div class="math notranslate nohighlight" id="equation-particlequantumparameter">
+<span class="eqno">(9)<a class="headerlink" href="#equation-particlequantumparameter" title="Permalink to this equation">¶</a></span>\[\chi = \frac{\gamma}{E_s} \left| \left( \beta \cdot \mathbf{E}
+\right)^2 - \left( \mathbf{E} + \mathbf{v} \times \mathbf{B} \right)^2
+\right|^{1/2}\]</div>
+<p>where <span class="math notranslate nohighlight">\(E_s = m^2 c^3 / \hbar e \simeq 1.3 \times 10^{18}\ \mathrm{V/m}\)</span> is
+the Schwinger field, <span class="math notranslate nohighlight">\(e\)</span> is the electron charge,
+<span class="math notranslate nohighlight">\(m\)</span> is the electron mass, <span class="math notranslate nohighlight">\(c\)</span> the speed of light in vacuum,
+<span class="math notranslate nohighlight">\(\hbar\)</span> the reduced Planck constant. <span class="math notranslate nohighlight">\(\mathbf{E} = (E_x, E_y, E_z)\)</span>
+and <span class="math notranslate nohighlight">\(\mathbf{B} = (B_x, B_y, B_z)\)</span> are respectively the electric and
+the magnetic fields. <span class="math notranslate nohighlight">\(\gamma = \varepsilon / m c^2\)</span> is the particle
+Lorentz factor (and the normalized particle energy). <span class="math notranslate nohighlight">\(\beta = v/c\)</span> is
+the normalized particle velocity. In <a class="reference internal" href="#radiationregimes"><span class="std std-numref">Table 1</span></a>,
+<span class="math notranslate nohighlight">\(\varepsilon_\gamma = \gamma_\gamma mc^2\)</span> is the photon energy.</p>
+<table class="docutils align-default" id="radiationregimes">
+<colgroup>
+<col style="width: 27%" />
+<col style="width: 19%" />
+<col style="width: 35%" />
+<col style="width: 20%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Regime</p></th>
+<th class="head"><p><span class="math notranslate nohighlight">\(\chi\)</span> value</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Models</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Classical radiation emission</p></td>
+<td><p><span class="math notranslate nohighlight">\(\chi \sim 10^{-3}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\varepsilon_\gamma  \ll \varepsilon\)</span>
+, radiated energy overestimated for
+<span class="math notranslate nohighlight">\(\chi &gt; 10^{-2}\)</span></p></td>
+<td><p>Landau-Lifshitz</p></td>
+</tr>
+<tr class="row-odd"><td><p>Semi-classical radiation emission</p></td>
+<td><p><span class="math notranslate nohighlight">\(\chi \sim 10^{-2}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\varepsilon_\gamma  \ll \varepsilon\)</span>
+, no stochastic effects</p></td>
+<td><p>Corrected Landau-Lifshitz</p></td>
+</tr>
+<tr class="row-even"><td><p>Weak quantum regime</p></td>
+<td><p><span class="math notranslate nohighlight">\(\chi \sim 10^{-1}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\varepsilon_\gamma  &lt; \varepsilon\)</span>,
+<span class="math notranslate nohighlight">\(\varepsilon_\gamma / mc^2  \gg 1\)</span></p></td>
+<td><p>Stochastic model of
+Niel <cite>et al</cite> / Monte-Carlo</p></td>
+</tr>
+<tr class="row-odd"><td><p>Quantum regime</p></td>
+<td><p><span class="math notranslate nohighlight">\(\chi \sim 1\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\varepsilon_\gamma \sim \varepsilon\)</span></p></td>
+<td><p>Monte-Carlo</p></td>
+</tr>
+</tbody>
+</table>
+<p>When quantum electrodynamics (QED) effects are negligible (classical regime),
+the radiation reaction can be treated as a
+continuous friction force acting on the particles.
+Several models have been published (e.g. LAD,
+<a class="reference internal" href="#landau1947" id="id1"><span>[Landau1947]</span></a>, Sokolov, Capdessus).
+The ones used in <strong class="program">Smilei</strong> are
+based on the Landau-Lifshitz model approximated for high Lorentz factors
+(<span class="math notranslate nohighlight">\(\gamma \gg 1\)</span>).</p>
+<p>In the quantum regime, photons with energies of the order of the energies of
+the emitting electron can be produced (<span class="math notranslate nohighlight">\(\varepsilon_\gamma \sim \varepsilon_\pm\)</span>).
+A continuous friction force can not be used anymore.
+This is treated using a Monte-Carlo
+description of discrete high-energy photon emissions
+(see <a class="reference internal" href="#timokhin2010" id="id2"><span>[Timokhin2010]</span></a>, <a class="reference internal" href="#elkina2011" id="id3"><span>[Elkina2011]</span></a>, <a class="reference internal" href="#duclous2011" id="id4"><span>[Duclous2011]</span></a>, and <a class="reference internal" href="#lobet2013" id="id5"><span>[Lobet2013]</span></a>).</p>
+<p>In the intermediate regime (<span class="math notranslate nohighlight">\(\chi \sim 1\)</span>), where the energy of the emitted photons remains
+small with respect to that of the emitting electrons, but for which the
+stochastic nature of photon emission cannot be neglected, the electron dynamics
+is described by the addition of a stochastic term derived from a Fokker-Planck
+expansion (<a class="reference internal" href="material.html#niel2018" id="id6"><span>[Niel2018]</span></a>).</p>
+<p>Use <a class="reference internal" href="#radiationregimes"><span class="std std-numref">Table 1</span></a> to choose properly
+the most appropriate radiation reaction model
+in <strong class="program">Smilei</strong> (see <a class="reference internal" href="namelist.html#species"><span class="std std-ref">the radiation configuration in Species</span></a>).</p>
+<p>The next sections describe in more details the models implemented
+in <strong class="program">Smilei</strong> to deal with the different regimes of emission.</p>
+<hr class="docutils" />
+<div class="section" id="continuous-radiation-models">
+<h2>Continuous radiation models<a class="headerlink" href="#continuous-radiation-models" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="approximated-landau-lifshitz-classical-model">
+<h3>Approximated Landau-Lifshitz classical model<a class="headerlink" href="#approximated-landau-lifshitz-classical-model" title="Permalink to this headline">¶</a></h3>
+<p>The classical radiation friction force acting on an ultra-relativistic electron
+has been derived by <a class="reference internal" href="#landau1947" id="id7"><span>[Landau1947]</span></a>.
+The equation of momentum evolution implemented in
+PIC codes is composed of both the classical Lorentz force <span class="math notranslate nohighlight">\(F_L\)</span>
+and the radiation friction term <span class="math notranslate nohighlight">\(F_{rad}\)</span> so that:</p>
+<div class="math notranslate nohighlight" id="equation-momentumeq">
+<span class="eqno">(10)<a class="headerlink" href="#equation-momentumeq" title="Permalink to this equation">¶</a></span>\[\frac{d\mathbf{p}}{dt} = \mathbf{F}_L + \mathbf{F}_{rad}\]</div>
+<p>with</p>
+<div class="math notranslate nohighlight" id="equation-llfrictionforce">
+<span class="eqno">(11)<a class="headerlink" href="#equation-llfrictionforce" title="Permalink to this equation">¶</a></span>\[\begin{split}\mathbf{F}_{rad} = -\frac{2}{3} e \tau_e \gamma \left( \frac{d\mathbf{E}}{dt} + \mathbf{u} \times \frac{\mathbf{B}}{dt} \right) \\
++ \frac{2}{3} \frac{e}{E_{cr}} \left[ \left( \mathbf{u} \cdot \mathbf{E} \right) \mathbf{E} - \mathbf{B} \times \left( \mathbf{E} + \mathbf{u} \times \mathbf{B} \right) \right] \\
+- \frac{2}{3}\frac{e}{E_{cr}} \gamma^2 \left[ \left( \mathbf{E} + \mathbf{u} \times \mathbf{B} \right)^2 - \left( \mathbf{u} \cdot \mathbf{E}\right)^2 \right] \mathbf{u}\end{split}\]</div>
+<p>where <span class="math notranslate nohighlight">\(\mathbf{u} = \mathbf{p} / (\gamma m c)\)</span> is the velocity,
+<span class="math notranslate nohighlight">\(\mathbf{p}\)</span> the momentum,
+<span class="math notranslate nohighlight">\(\tau_e = r_e / c = e^2 / 4 \pi \varepsilon_0 m c^3\)</span>
+the time for light to travel across the classical electron radius,
+<span class="math notranslate nohighlight">\(E_{cr} = E_s / \alpha\)</span> the critical field,
+and <span class="math notranslate nohighlight">\(\alpha\)</span> the fine structure constant.</p>
+<p>For an ultra-relativistic electron (<span class="math notranslate nohighlight">\(\gamma \gg 1\)</span>) some terms in
+Eq. <a class="reference internal" href="#equation-llfrictionforce">(11)</a> not explicited here can be neglected so that the
+friction force reduces to a single term:</p>
+<div class="math notranslate nohighlight" id="equation-llfrictionforceapprox">
+<span class="eqno">(12)<a class="headerlink" href="#equation-llfrictionforceapprox" title="Permalink to this equation">¶</a></span>\[\mathbf{F}_{rad} = - P_{cl} \mathbf{u} / \left( \mathbf{u}^2 c \right)\]</div>
+<p>where <span class="math notranslate nohighlight">\(P_{cl} = \frac{2}{3} \frac{\alpha^2 mc^2}{\tau_e} \chi^2\)</span>.</p>
+<p>The corresponding emitted power distribution as a function of the photon
+frequency <span class="math notranslate nohighlight">\(\omega\)</span> reads</p>
+<div class="math notranslate nohighlight" id="equation-clasradpower">
+<span class="eqno">(13)<a class="headerlink" href="#equation-clasradpower" title="Permalink to this equation">¶</a></span>\[\frac{dP}{d\omega} = \frac{9 \sqrt{3}}{8 \pi} \frac{P_{cl}}{ \omega_c}
+\frac{\omega}{\omega_c} \int_{\omega/\omega_c}^{+\infty}{dy K_{5/3}(y)}\]</div>
+<p>with <span class="math notranslate nohighlight">\(K_\nu(z)\)</span> the modified Bessel function of the second kind,
+<span class="math notranslate nohighlight">\(\omega_c = 3 \gamma \alpha \chi / (2 \tau_e)\)</span> the critical frequency for
+synchrotron emission.
+This classical approach requires the emitted photon energy
+<span class="math notranslate nohighlight">\(\varepsilon_\gamma = \hbar\omega\)</span> to be much smaller than that of
+the emitting particle. This translates to <span class="math notranslate nohighlight">\(\chi \ll 1\)</span> as given in the
+introduction. Otherwise, the radiated power is know to strongly overestimate
+the physical radiated energy when <span class="math notranslate nohighlight">\(\chi\)</span> approaches 0.1.</p>
+</div>
+<div class="section" id="corrected-classical-model">
+<h3>Corrected classical model<a class="headerlink" href="#corrected-classical-model" title="Permalink to this headline">¶</a></h3>
+<p>In the quantum emission regime, if the field is (i) slowly-varying
+compared to the formation time of the radiated photon and (ii)
+undercritical with respect to the Schwinger field, then the Lorentz-invariant production
+rate of high-energy photons (via the multiphoton inverse Compton scattering)
+can be written as:</p>
+<div class="math notranslate nohighlight" id="equation-photonprodrate">
+<span class="eqno">(14)<a class="headerlink" href="#equation-photonprodrate" title="Permalink to this equation">¶</a></span>\[\frac{d^2N}{dt d\chi_\gamma} = \frac{1}{\pi \sqrt{3}} \frac{\alpha^2}{\tau_e \chi_\pm}
+\left[ \int_\nu^{+\infty}{K_{5/3(y)}dy} + \frac{2 \chi_\gamma \nu}{2} K_{2/3}(\nu) \right]\]</div>
+<p>This equation can be also decomposed into:</p>
+<div class="math notranslate nohighlight" id="equation-photonprodrate2">
+<span class="eqno">(15)<a class="headerlink" href="#equation-photonprodrate2" title="Permalink to this equation">¶</a></span>\[\frac{d^2N}{dt d\chi} = \frac{2}{3} \frac{\alpha^2}{\tau_e} \frac{S(\chi_\pm , \chi)}{\chi}\]</div>
+<p>where <span class="math notranslate nohighlight">\(S(\chi_\pm , \chi)\)</span> is so called the synchrotron emissity function.</p>
+<p>We therefore have:</p>
+<div class="math notranslate nohighlight" id="equation-synchrotron-emissivity-function">
+<span class="eqno">(16)<a class="headerlink" href="#equation-synchrotron-emissivity-function" title="Permalink to this equation">¶</a></span>\[S(\chi_\pm , \chi) = \frac{\sqrt{3}}{2\pi} \frac{\chi_\gamma}{\chi}
+\left[ \int_\nu^{+\infty}{K_{5/3(y)}dy} + \frac{2 \chi_\gamma \nu}{2} K_{2/3}(\nu) \right]\]</div>
+<p>Condition (i) is fulfilled when <span class="math notranslate nohighlight">\(a_0 = e \| A^{\mu} \| / mc^2 \gg 1\)</span>, <span class="math notranslate nohighlight">\(A^{\mu}\)</span>
+being the four-potential laser amplitude.</p>
+<p>conditions (ii) corresponds to <span class="math notranslate nohighlight">\(\mathbf{B}^2 - \mathbf{E}^2 \ll E_s^2\)</span>
+and  <span class="math notranslate nohighlight">\(\mathbf{B}\cdot \mathbf{E} \ll 1\)</span>
+(see <a class="reference internal" href="#ritus1985" id="id8"><span>[Ritus1985]</span></a> for more details).</p>
+<p>The emitted power distribution can be deduced from Eq. <a class="reference internal" href="#equation-photonprodrate">(14)</a> in
+terms of the photon normalized energy. After integration, one obtains the
+expression of the radiated power in the quantum regime:</p>
+<div class="math notranslate nohighlight" id="equation-quantumradpower">
+<span class="eqno">(17)<a class="headerlink" href="#equation-quantumradpower" title="Permalink to this equation">¶</a></span>\[P_{rad} = P_{cl} g(\chi)\]</div>
+<p>with</p>
+<div class="math notranslate nohighlight" id="equation-g">
+<span class="eqno">(18)<a class="headerlink" href="#equation-g" title="Permalink to this equation">¶</a></span>\[g \left( \chi \right) = \frac{9 \sqrt{3} }{8 \pi} \int_0^{+\infty}{d\nu
+\left[  \frac{2\nu^2 }{\left( 2 + 3 \nu \chi \right) ^2}K_{5/3}(\nu) +
+\frac{4 \nu \left( 3 \nu \chi\right)^2 }{\left( 2 + 3 \nu \chi \right)^4}K_{2/3}(\nu) \right]}\]</div>
+<p>The quantum instantaneous radiated power is nothing else than the classical one
+multiplied by the correction <span class="math notranslate nohighlight">\(g \left( \chi \right)\)</span>.</p>
+<p>When <span class="math notranslate nohighlight">\(\chi \ll 1\)</span>, this correction is close to 1 and the corrected
+Friction force
+is therefore similar to Eq. <a class="reference internal" href="#equation-llfrictionforceapprox">(12)</a>.
+The correction rapidly decreases otherwise when <span class="math notranslate nohighlight">\(\chi &gt; 10^{-2}\)</span>.</p>
+<p>The correction does not take into account stochastic
+effects when the photon energy approaches that of
+the emitting electron. This is the subject of the next section.</p>
+</div>
+</div>
+<hr class="docutils" />
+<div class="section" id="stochastic-schemes">
+<h2>Stochastic schemes<a class="headerlink" href="#stochastic-schemes" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="fokker-planck-stochastic-model">
+<h3>Fokker-Planck stochastic model<a class="headerlink" href="#fokker-planck-stochastic-model" title="Permalink to this headline">¶</a></h3>
+<p>The Fokker-Planck approach is an extension of the corrected Landau-Lifshitz
+model with an operator that takes into account diffusive stochastic effects
+(<a class="reference internal" href="material.html#niel2018" id="id9"><span>[Niel2018]</span></a>):</p>
+<div class="math notranslate nohighlight" id="equation-nielstochasticforce">
+<span class="eqno">(19)<a class="headerlink" href="#equation-nielstochasticforce" title="Permalink to this equation">¶</a></span>\[F_{rad} dt = \left[ -P_{cl} g \left( \chi \right) dt + mc^2
+\sqrt{R\left( \chi, \gamma \right)} dW \right]
+\mathbf{u} / \left( \mathbf{u}^2 c \right)\]</div>
+<p>where <span class="math notranslate nohighlight">\(dW\)</span> is a Wiener process of variance <span class="math notranslate nohighlight">\(dt\)</span>,</p>
+<div class="math notranslate nohighlight" id="equation-nielr">
+<span class="eqno">(20)<a class="headerlink" href="#equation-nielr" title="Permalink to this equation">¶</a></span>\[  R\left( \chi, \gamma \right) = \frac{2}{3} \frac{\alpha^2}{\tau_e} \gamma
+  h \left( \chi \right)\]</div>
+<p>and</p>
+<div class="math notranslate nohighlight" id="equation-nielh">
+<span class="eqno">(21)<a class="headerlink" href="#equation-nielh" title="Permalink to this equation">¶</a></span>\[  h \left( \chi \right) = \frac{9 \sqrt{3}}{4 \pi} \int_0^{+\infty}{d\nu
+  \left[ \frac{2\chi^3 \nu^3}{\left( 2 + 3\nu\chi \right)^3} K_{5/3}(\nu)
+  + \frac{54 \chi^5 \nu^4}{\left( 2 + 3 \nu \chi \right)^5} K_{2/3}(\nu) \right]}\]</div>
+</div>
+<div class="section" id="monte-carlo-quantum-model">
+<h3>Monte-Carlo quantum model<a class="headerlink" href="#monte-carlo-quantum-model" title="Permalink to this headline">¶</a></h3>
+<p>The Monte-Carlo treatment of the emission is more complex process than
+the previous ones and can be divided into several steps (<a class="reference internal" href="#duclous2011" id="id10"><span>[Duclous2011]</span></a>,
+<a class="reference internal" href="#lobet2013" id="id11"><span>[Lobet2013]</span></a>, <a class="reference internal" href="#lobet2015" id="id12"><span>[Lobet2015]</span></a>):</p>
+<ol class="arabic">
+<li><p>An incremental optical depth <span class="math notranslate nohighlight">\(\tau\)</span>, initially set to 0, is assigned to the particle.
+Emission occurs when it reaches the final optical depth <span class="math notranslate nohighlight">\(\tau_f\)</span>
+sampled from <span class="math notranslate nohighlight">\(\tau_f = -\log{\xi}\)</span> where <span class="math notranslate nohighlight">\(\xi\)</span> is a random number in <span class="math notranslate nohighlight">\(\left]0,1\right]\)</span>.</p></li>
+<li><p>The optical depth <span class="math notranslate nohighlight">\(\tau\)</span> evolves according to the field and particle
+energy variations following this integral:</p>
+<div class="math notranslate nohighlight" id="equation-mcdtaudt">
+<span class="eqno">(22)<a class="headerlink" href="#equation-mcdtaudt" title="Permalink to this equation">¶</a></span>\[  \frac{d\tau}{dt} = \int_0^{\chi_{\pm}}{ \frac{d^2N}{d\chi dt}  d\chi }
+  = \frac{2}{3} \frac{\alpha^2}{\tau_e} \int_0^{\chi_{\pm}}{ \frac{S(\chi_\pm, \chi)}{\chi}  d\chi }
+  = \frac{2}{3} \frac{\alpha^2}{\tau_e} K (\chi_\pm)\]</div>
+<p>that simply is the production rate of photons
+(integration of Eq. <a class="reference internal" href="#equation-photonprodrate">(14)</a>).
+Here, <span class="math notranslate nohighlight">\(\chi_{\pm}\)</span> is the emitting electron (or positron) quantum parameter and
+<span class="math notranslate nohighlight">\(\chi\)</span> the integration variable.</p>
+</li>
+<li><p>The emitted photon’s quantum parameter <span class="math notranslate nohighlight">\(\chi_{\gamma}\)</span> is computed by
+inverting the cumulative distribution function:</p>
+<div class="math notranslate nohighlight" id="equation-cumulativedistr">
+<span class="eqno">(23)<a class="headerlink" href="#equation-cumulativedistr" title="Permalink to this equation">¶</a></span>\[  \xi = P(\chi_\pm,\chi_{\gamma}) = \frac{\displaystyle{\int_0^{\chi_\gamma}{S(\chi_\pm, \chi) / \chi
+  d\chi}}}{\displaystyle{\int_0^{\chi_\pm}{S(\chi_\pm, \chi) / \chi d\chi}}}\]</div>
+<p>where <span class="math notranslate nohighlight">\(S\)</span> is the so-called synchrotron emissivity function so that</p>
+<div class="math notranslate nohighlight" id="equation-mcf">
+<span class="eqno">(24)<a class="headerlink" href="#equation-mcf" title="Permalink to this equation">¶</a></span>\[  \frac{d^2 N}{dt d\chi} = \frac{2}{3} \frac{\alpha^2}{\tau_e} \frac{S (\chi_\pm, \chi)}{\chi}\]</div>
+<p>The inversion of  <span class="math notranslate nohighlight">\(\xi = P(\chi_\pm,\chi_{\gamma})\)</span> is done after drawing
+a second random number
+<span class="math notranslate nohighlight">\(\phi \in \left[ 0,1\right]\)</span> to find <span class="math notranslate nohighlight">\(\chi_{\gamma}\)</span> by solving :</p>
+<div class="math notranslate nohighlight" id="equation-inverse-xi">
+<span class="eqno">(25)<a class="headerlink" href="#equation-inverse-xi" title="Permalink to this equation">¶</a></span>\[\xi^{-1} = P^{-1}(\chi_\pm, \chi_{\gamma}) = \phi\]</div>
+</li>
+<li><p>The energy of the emitted photon is then computed:
+<span class="math notranslate nohighlight">\(\varepsilon_\gamma = mc^2 \gamma_\gamma =
+mc^2 \gamma_\pm \chi_\gamma / \chi_\pm\)</span>.</p></li>
+<li><p>The particle momentum is then updated using momentum conservation
+considering forward emission (valid when <span class="math notranslate nohighlight">\(\gamma_\pm \gg 1\)</span>).</p>
+<div class="math notranslate nohighlight" id="equation-momentumupdate">
+<span class="eqno">(26)<a class="headerlink" href="#equation-momentumupdate" title="Permalink to this equation">¶</a></span>\[  F_{rad} = - \frac{\varepsilon_\gamma}{c} \frac{\mathbf{p_\pm}}{\| \mathbf{p_\pm} \|}\]</div>
+<p>The radiated force is the recoil induced by the photon emission.
+Radiation reaction is therefore a discrete process.
+Note that momentum conservation does not exactly conserve energy.
+It can be shown that the error <span class="math notranslate nohighlight">\(\epsilon\)</span> tends to 0 when the particle
+energy tends to infinity <a class="reference internal" href="#lobet2015" id="id13"><span>[Lobet2015]</span></a> and that the error is low when
+<span class="math notranslate nohighlight">\(\varepsilon_\pm \gg 1\)</span> and <span class="math notranslate nohighlight">\(\varepsilon_\gamma \ll \varepsilon_\pm\)</span>.
+Between emission events, the electron dynamics is still governed by the
+Lorentz force.</p>
+<p>If the photon is emitted as a macro-photon, initial position is the same as
+for the emitting particle. The weight is also conserved.</p>
+</li>
+</ol>
+</div>
+</div>
+<hr class="docutils" />
+<div class="section" id="implementation">
+<h2>Implementation<a class="headerlink" href="#implementation" title="Permalink to this headline">¶</a></h2>
+<p>C++ classes for the radiation processes are located in the directory <code class="docutils literal notranslate"><span class="pre">src/Radiation</span></code>.
+In <strong class="program">Smilei</strong>, the radiative processes are not incorporated in the pusher in
+order to preserve the vector performance of the pusher when using non-vectorizable
+radiation models such as the Monte-Carlo process.</p>
+<p>Description of the files:</p>
+<ul class="simple">
+<li><p>Class <code class="docutils literal notranslate"><span class="pre">RadiationTable</span></code>: useful tools, parameters and the tables.</p></li>
+<li><p>Class <code class="docutils literal notranslate"><span class="pre">Radiation</span></code>: the generic class from which will inherit specific
+classes for each model.</p></li>
+<li><p>Class <code class="docutils literal notranslate"><span class="pre">RadiationFactory</span></code>: manages the choice of the radiation model among the following.</p></li>
+<li><p>Class <code class="docutils literal notranslate"><span class="pre">RadiationLandauLifshitz</span></code>: classical Landau-Lifshitz radiation process.</p></li>
+<li><p>Class <code class="docutils literal notranslate"><span class="pre">RadiationCorrLandauLifshitz</span></code>: corrected Landau-Lifshitz radiation process.</p></li>
+<li><p>Class <code class="docutils literal notranslate"><span class="pre">RadiationNiel</span></code>: stochastic diffusive model of <a class="reference internal" href="material.html#niel2018" id="id14"><span>[Niel2018]</span></a>.</p></li>
+<li><p>Class <code class="docutils literal notranslate"><span class="pre">RadiationMonteCarlo</span></code>: Monte-Carlo model.</p></li>
+</ul>
+<p>As explained below, many functions have been tabulated because of
+the cost of their computation for each particle. This table can be generated by
+<strong class="program">Smilei</strong> at the initialization.
+The parameters such as the ranges and the discretization can be
+given in the <a class="reference internal" href="namelist.html#radiationreaction"><span class="std std-ref">RadiationReaction</span></a> namelist section.
+Once generated, the table can be written on the disk and reloaded for a next run.
+Small tables coded in hdf5 are provided in the repository in the folder
+databases with the name: <cite>radiation_tables.h5</cite>.</p>
+<div class="section" id="landau-lifshitz-based-models">
+<h3>Landau-Lifshitz-based models<a class="headerlink" href="#landau-lifshitz-based-models" title="Permalink to this headline">¶</a></h3>
+<p>The classical Landau-Lifshitz model approximated for high-<span class="math notranslate nohighlight">\(\gamma\)</span>
+given by Eq. <a class="reference internal" href="#equation-llfrictionforceapprox">(12)</a>
+has been implemented in <strong class="program">Smilei</strong>
+using a simple explicit scheme.
+The model is accessible in the species configuration under the name
+<code class="docutils literal notranslate"><span class="pre">Landau-Lifshitz</span></code> or <code class="docutils literal notranslate"><span class="pre">ll</span></code>.</p>
+<p>For the corrected version, we use a fit of the function
+<span class="math notranslate nohighlight">\(g(\chi)\)</span> given by</p>
+<div class="math notranslate nohighlight" id="equation-quantumcorrfit">
+<span class="eqno">(27)<a class="headerlink" href="#equation-quantumcorrfit" title="Permalink to this equation">¶</a></span>\[g \left( \chi_{\pm} \right) = \left[ 1 + 4.8 \left( 1 + \chi_{\pm} \right)
+\log \left( 1 + 1.7 \chi_{\pm} \right) + 2.44 \chi_{\pm}^2 \right]^{-2/3}\]</div>
+<p>This fit enables to keep the vectorization of the particle loop.
+The corrected model is accessible in the species configuration under the name
+<code class="docutils literal notranslate"><span class="pre">corrected-Landau-Lifshitz</span></code> or <code class="docutils literal notranslate"><span class="pre">cll</span></code>.</p>
+</div>
+<div class="section" id="fokker-planck-stochastic-model-of-niel-et-al">
+<h3>Fokker-Planck stochastic model of Niel <em>et al</em>.<a class="headerlink" href="#fokker-planck-stochastic-model-of-niel-et-al" title="Permalink to this headline">¶</a></h3>
+<p>Eq. <a class="reference internal" href="#equation-nielstochasticforce">(19)</a> is implemented in <strong class="program">Smilei</strong> using
+a simple explicit scheme.</p>
+<p>The direct computation of Eq. <a class="reference internal" href="#equation-nielh">(21)</a> during the emission process is too expensive.
+For performance issues,  <strong class="program">Smilei</strong> uses tabulated values or fit functions.</p>
+<p>Concerning the tabulation, <strong class="program">Smilei</strong> first checks the presence of
+an external table at the specified path.
+If the latter does not exist at the specified path, the table is computed at initialization.
+The new table is outputed on disk in the current simulation directory.
+It is recommended to use existing external tables to save simulation time.
+The computation of <em>h</em> during the simulation can slow down the initialization
+and represents an important part of the total simulation.
+The parameters such as the <span class="math notranslate nohighlight">\(\chi\)</span> range and the discretization can be
+given in <a class="reference internal" href="namelist.html#radiationreaction"><span class="std std-ref">RadiationReaction</span></a>.</p>
+<p>Polynomial fits of this integral can be obtained in log-log
+or log10-log10 domain. However, high accuracy requires high-order polynomials
+(order 20 for an accuracy around <span class="math notranslate nohighlight">\(10^{-10}\)</span> for instance).
+In <strong class="program">Smilei</strong>, an order 5 (see Eq. <a class="reference internal" href="#equation-fit5">(28)</a>) and 10 polynomial fits are implemented.
+They are valid for quantum parameters <span class="math notranslate nohighlight">\(\chi\)</span> between <span class="math notranslate nohighlight">\(10^{-3}\)</span> and 10.</p>
+<div class="math notranslate nohighlight" id="equation-fit5">
+<span class="eqno">(28)<a class="headerlink" href="#equation-fit5" title="Permalink to this equation">¶</a></span>\[\begin{split}h_{o5}(\chi) = \exp{ \left(1.399937206900322 \times 10^{-4}  \log(\chi)^5 \\
++ 3.123718241260330 \times 10^{-3}  \log{(\chi)}^4 \\
++ 1.096559086628964 \times 10^{-2}  \log(\chi)^3 \\
+-1.733977278199592 \times 10^{-1}  \log(\chi)^2 \\
++ 1.492675770100125  \log(\chi) \\
+-2.748991631516466 \right) }\end{split}\]</div>
+<p>An additional fit from <a class="reference internal" href="#ridgers2017" id="id15"><span>[Ridgers2017]</span></a> has been implemented and the formula
+is given in Eq. <a class="reference internal" href="#equation-h-fit-ridgers">(29)</a>.</p>
+<div class="math notranslate nohighlight" id="equation-h-fit-ridgers">
+<span class="eqno">(29)<a class="headerlink" href="#equation-h-fit-ridgers" title="Permalink to this equation">¶</a></span>\[h_{Ridgers}(\chi) = \chi^3  \frac{165}{48 \sqrt{3}} \left(1. + (1. + 4.528 \chi) \log(1.+12.29 \chi) + 4.632 \chi^2 \right)^{-7/6}\]</div>
+<p>The stochastic diffusive model is accessible in the species configuration
+under the name <code class="docutils literal notranslate"><span class="pre">Niel</span></code>.</p>
+</div>
+<div class="section" id="id16">
+<h3>Monte-Carlo quantum model<a class="headerlink" href="#id16" title="Permalink to this headline">¶</a></h3>
+<p>The computation of Eq. <a class="reference internal" href="#equation-mcdtaudt">(22)</a> would be too expensive for every single
+particles.
+Instead, the integral of the function <span class="math notranslate nohighlight">\(S(\chi_\pm, \chi) / \chi\)</span>
+called <span class="math notranslate nohighlight">\(K(\chi_\pm)\)</span> is tabulated.
+The tabulation boundaries depend on the user.
+They can be specified in the <strong class="program">Smilei</strong> input file.</p>
+<p>This table is referred to as <code class="docutils literal notranslate"><span class="pre">integfochi_table</span></code> and related parameters
+start by <code class="docutils literal notranslate"><span class="pre">integfochi</span></code> in the code.</p>
+<p>Similarly, Eq. <a class="reference internal" href="#equation-cumulativedistr">(23)</a> is tabulated (named <code class="docutils literal notranslate"><span class="pre">xip</span></code> in the code).
+The only difference is that a minimum photon quantum parameter
+<span class="math notranslate nohighlight">\(\chi_{\gamma,\min}\)</span> is computed before for the integration so that:</p>
+<div class="math notranslate nohighlight" id="equation-chimin">
+<span class="eqno">(30)<a class="headerlink" href="#equation-chimin" title="Permalink to this equation">¶</a></span>\[  \frac{\displaystyle{\int_{0}^{\chi_{\gamma,\min}}{S(\chi_\pm, \chi) / \chi
+  d\chi}}}{\displaystyle{\int_0^{\chi_\pm}{S(\chi_\pm, \chi) / \chi d\chi}}} &lt; \epsilon\]</div>
+<p>This enables to find a lower bound to the <span class="math notranslate nohighlight">\(\chi_\gamma\)</span> range
+(discretization in the log domain) so that the
+remaining part is negligible in term of radiated energy.
+The parameter <span class="math notranslate nohighlight">\(\epsilon\)</span> is called <code class="docutils literal notranslate"><span class="pre">xip_threshold</span></code> in
+<a class="reference internal" href="namelist.html#radiationreaction"><span class="std std-ref">RadiationReaction</span></a>.</p>
+<p>The tables can be generated by <strong class="program">Smilei</strong> at the initialization.
+The parameters such as the <span class="math notranslate nohighlight">\(\chi\)</span> range and the discretization can be
+given in <a class="reference internal" href="namelist.html#radiationreaction"><span class="std std-ref">RadiationReaction</span></a>.</p>
+<p>The Monte-Carlo model is accessible in the species configuration
+under the name <code class="docutils literal notranslate"><span class="pre">Monte-Carlo</span></code> or <code class="docutils literal notranslate"><span class="pre">mc</span></code>.</p>
+</div>
+</div>
+<hr class="docutils" />
+<div class="section" id="benchmarks">
+<h2>Benchmarks<a class="headerlink" href="#benchmarks" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="counter-propagating-plane-wave-1d">
+<h3>Counter-propagating plane wave, 1D<a class="headerlink" href="#counter-propagating-plane-wave-1d" title="Permalink to this headline">¶</a></h3>
+<p>In the benchmark <code class="docutils literal notranslate"><span class="pre">benchmark/tst1d_9_rad_electron_laser_collision.py</span></code>,
+a GeV electron bunch is initialized near the right
+domain boundary and propagates towards the left boundary from which a plane
+wave is injected. The laser has an amplitude of <span class="math notranslate nohighlight">\(a_0 = 270\)</span>
+corresponding to an intensity of <span class="math notranslate nohighlight">\(10^{23}\ \mathrm{Wcm^{-2}}\)</span> at
+<span class="math notranslate nohighlight">\(\lambda = 1\ \mathrm{\mu m}\)</span>.
+The laser has a Gaussian profile of full-with at half maxium of
+<span class="math notranslate nohighlight">\(20 \pi \omega_r^{-1}\)</span> (10 laser periods).
+The maximal quantum parameter <span class="math notranslate nohighlight">\(\chi\)</span>
+value reached during the simulation is around 0.5.</p>
+<div class="figure align-default" id="id18">
+<span id="rad-counter-prop-scalar"></span><a class="reference internal image-reference" href="_images/rad_counter_prop_scalar.png"><img alt="_images/rad_counter_prop_scalar.png" src="_images/rad_counter_prop_scalar.png" style="width: 15cm;" /></a>
+<p class="caption"><span class="caption-number">Fig. 23 </span><span class="caption-text">Kinetic, radiated and total energy plotted respectively with solid, dashed and dotted lines for
+the <span class="blue">Monte-Carlo</span> (<strong>MC</strong>), <span class="orange">Niel</span> (<strong>Niel</strong>),
+<span class="green">corrected Landau-Lifshitz</span> (<strong>CLL</strong>) and the <span class="red">Landau-Lifshitz</span> (<strong>LL</strong>) models.</span><a class="headerlink" href="#id18" title="Permalink to this image">¶</a></p>
+</div>
+<p><a class="reference internal" href="#rad-counter-prop-scalar"><span class="std std-numref">Fig. 23</span></a> shows that the Monte-Carlo, the Niel and
+the corrected Landau-Lifshitz models exhibit very similar
+results in term of the total radiated and kinetic energy evolution with a final
+radiation rate of 80% the initial kinetic energy. The relative error on the
+total energy is small (<span class="math notranslate nohighlight">\(\sim 3\times10^{-3}\)</span>).
+As expected, the Landau-Lifshitz model overestimates the radiated energy
+because the interaction happens mainly in the quantum regime.</p>
+<div class="figure align-default" id="id19">
+<span id="rad-counter-prop-track"></span><a class="reference internal image-reference" href="_images/rad_counter_prop_track.png"><img alt="_images/rad_counter_prop_track.png" src="_images/rad_counter_prop_track.png" style="width: 18cm;" /></a>
+<p class="caption"><span class="caption-number">Fig. 24 </span><span class="caption-text">Evolution of the normalized kinetic energy
+<span class="math notranslate nohighlight">\(\gamma - 1\)</span> of some selected electrons as a function of their position.</span><a class="headerlink" href="#id19" title="Permalink to this image">¶</a></p>
+</div>
+<p><a class="reference internal" href="#rad-counter-prop-track"><span class="std std-numref">Fig. 24</span></a> shows that the Monte-Carlo and the Niel models
+reproduce the stochastic nature of the trajectories as opposed to the
+continuous approaches (corrected Landau-Lifshitz and Landau-Lifshitz).
+In the latter, every particles initially located at the same position will
+follow the same trajectories.
+The stochastic nature of the emission for high <span class="math notranslate nohighlight">\(\chi\)</span> values can
+have consequences in term of final spatial and energy distributions.
+Not shown here, the Niel stochastic model does not reproduce correctly the
+moment of order 3 as explained in <a class="reference internal" href="material.html#niel2018" id="id17"><span>[Niel2018]</span></a>.</p>
+</div>
+<div class="section" id="synchrotron-2d">
+<h3>Synchrotron, 2D<a class="headerlink" href="#synchrotron-2d" title="Permalink to this headline">¶</a></h3>
+<p>A bunch of electrons of initial momentum <span class="math notranslate nohighlight">\(p_{-,0}\)</span>
+evolves in a constant magnetic field <span class="math notranslate nohighlight">\(B\)</span> orthogonal
+to their initial propagation direction.
+In such a configuration, the electron bunch is supposed to rotate endlessly
+with the same radius <span class="math notranslate nohighlight">\(R = p_{-,0} /e B\)</span> without radiation energy loss.
+Here, the magnetic field is so strong that the electrons
+radiate their energy as in a synchrotron facility.
+In this setup, each electron quantum parameter depends on their Lorentz
+factors <span class="math notranslate nohighlight">\(\gamma_{-}\)</span> according to
+<span class="math notranslate nohighlight">\(\chi_{-} = \gamma_{-} B /m_e E_s\)</span>.
+The quantum parameter is maximum at the beginning of the interaction.
+The strongest radiation loss are therefore observed at the beginning too.
+As energy decreases, radiation loss becomes less and less important so that
+the emission regime progressively move from the quantum to the classical regime.</p>
+<p>Similar simulation configuration can be found in the benchmarks.
+It corresponds to two different input files in the benchmark folder:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">tst2d_8_synchrotron_chi1.py</span></code>: tests and compares the corrected
+Landau-Lifshitz and the Monte-Carlo model for an initial <span class="math notranslate nohighlight">\(\chi = 1\)</span>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tst2d_9_synchrotron_chi0.1.py</span></code>: tests and compares the corrected
+Landau-Lifshitz and the Niel model for an initial <span class="math notranslate nohighlight">\(\chi = 0.1\)</span>.</p></li>
+</ul>
+<p>In this section, we focus on the case with initial quantum parameter
+<span class="math notranslate nohighlight">\(\chi = 0.1\)</span>.
+The magnetic field amplitude is <span class="math notranslate nohighlight">\(B = 90 m \omega_r / e\)</span>.
+The initial electron Lorentz factor is
+<span class="math notranslate nohighlight">\(\gamma_{-,0} = \varepsilon_{-,0}/mc^2 =  450\)</span>.
+Electrons are initialized with a Maxwell-Juttner distribution of temperature
+<span class="math notranslate nohighlight">\(0.1 m_e c^2\)</span>.</p>
+<p><a class="reference internal" href="#synchrotron-scalar"><span class="std std-numref">Fig. 25</span></a> shows the time evolution of the particle kinetic energy,
+the radiated energy and the total energy. All radiation models provide
+similar evolution of these integrated quantities. The relative error on the
+total energy is between <span class="math notranslate nohighlight">\(2 \times 10^{-9}\)</span> and <span class="math notranslate nohighlight">\(3 \times 10^{-9}\)</span>.</p>
+<div class="figure align-default" id="id20">
+<span id="synchrotron-scalar"></span><a class="reference internal image-reference" href="_images/synchrotron_scalar.png"><img alt="_images/synchrotron_scalar.png" src="_images/synchrotron_scalar.png" style="width: 15cm;" /></a>
+<p class="caption"><span class="caption-number">Fig. 25 </span><span class="caption-text">Kinetic, radiated and total energies plotted respectively with solid, dashed and dotted
+lines for various models.</span><a class="headerlink" href="#id20" title="Permalink to this image">¶</a></p>
+</div>
+<p>The main difference between models can be understood by studying the
+particle trajectories and phase spaces. For this purpose, the local kinetic energy spatial-distribution
+at <span class="math notranslate nohighlight">\(25 \omega_r^{-1}\)</span> is shown in
+<a class="reference internal" href="#synchrotron-x-y-gamma"><span class="std std-numref">Fig. 26</span></a> for the different models.
+With continuous radiation energy loss
+(corrected Landau-Lifshitz case), each electron of the bunch rotates with a decreasing
+radius but the bunch.
+Each electron of similar initial energies have the same trajectories.
+In the case of a cold bunch (null initial temperature),
+the bunch would have kept its original shape.
+The radiation with this model only acts as a cooling mechanism.
+In the cases of the Niel and the Monte-Carlo radiation models,
+stochastic effects come into play and lead the bunch to spread spatially.
+Each individual electron of the bunch, even with similar initial energies,
+have different trajectories depending on their emission history.
+Stochastic effects are particularly strong at the beginning  with the highest
+<span class="math notranslate nohighlight">\(\chi\)</span> values when the radiation
+recoil is the most important.</p>
+<div class="figure align-default" id="id21">
+<span id="synchrotron-x-y-gamma"></span><a class="reference internal image-reference" href="_images/synchrotron_x_y_gamma.png"><img alt="_images/synchrotron_x_y_gamma.png" src="_images/synchrotron_x_y_gamma.png" style="width: 18cm;" /></a>
+<p class="caption"><span class="caption-number">Fig. 26 </span><span class="caption-text">Average normalized kinetic energy at time <span class="math notranslate nohighlight">\(25 \omega_r^{-1}\)</span>
+for the simulations with the Monte-Carlo, the Niel
+and the corrected Landau-Lifshitz (<strong>CLL</strong>) models.</span><a class="headerlink" href="#id21" title="Permalink to this image">¶</a></p>
+</div>
+<p><a class="reference internal" href="#synchrotron-t-gamma-ne"><span class="std std-numref">Fig. 27</span></a> shows the time evolution of
+the electron Lorentz factor distribution (normalized energy) for different
+radiation models.
+At the beginning, the distribution is extremely broad due to the Maxwell-Juttner parameters.
+The average energy is well around <span class="math notranslate nohighlight">\(\gamma_{-,0} = \varepsilon_{-,0}/mc^2 =  450\)</span>
+with maximal energies above <span class="math notranslate nohighlight">\(\gamma_{-} =  450\)</span>.</p>
+<p>In the case of a initially-cold electron beam,
+stochastic effects would have lead the bunch to spread energetically
+with the Monte-Carlo and the Niel stochastic models at the beginning of the simulation.
+This effect is hidden since electron energy is already highly spread at the
+beginning of the interaction.
+This effect is the strongest when the quantum parameter is high in the quantum regime.</p>
+<p>In the Monte-Carlo case, some electrons have lost all their energy almost immediately
+as shown by the lower part of the distribution below <span class="math notranslate nohighlight">\(\gamma_{-} =  50\)</span>
+after comparison with the Niel model.</p>
+<p>Then, as the particles cool down, the interaction enters the semi-classical
+regime where energy jumps are smaller.
+In the classical regime, radiation loss acts oppositely to the quantum regime.
+It reduces the spread in energy and space.
+In the Landau-Lifshitz case, this effect starts at the beginning even
+in the quantum regime due to the nature of the model.
+For a initially-cold electron bunch, there would not have been
+energy spread at the beginning of the simulation. All electron would have lost
+their energy in a similar fashion (superimposed behavior).
+This model can be seen as the average behavior of the stochastic ones of
+electron groups having the same initial energy.</p>
+<div class="figure align-default" id="id22">
+<span id="synchrotron-t-gamma-ne"></span><a class="reference internal image-reference" href="_images/synchrotron_t_gamma_ne.png"><img alt="_images/synchrotron_t_gamma_ne.png" src="_images/synchrotron_t_gamma_ne.png" style="width: 18cm;" /></a>
+<p class="caption"><span class="caption-number">Fig. 27 </span><span class="caption-text">Time evolution of the electron energy distribution for the Monte-Carlo, the Niel
+and the corrected Landau-Lifshitz (<strong>CLL</strong>) models.</span><a class="headerlink" href="#id22" title="Permalink to this image">¶</a></p>
+</div>
+</div>
+<div class="section" id="thin-foil-2d">
+<h3>Thin foil, 2D<a class="headerlink" href="#thin-foil-2d" title="Permalink to this headline">¶</a></h3>
+<p>This case is not in the list of available benchmarks but we decided to present
+these results here as an example of simulation study.
+An extremely intense plane wave in 2D interacts with a thin, fully-ionized carbon foil.
+The foil is located 4 µm from the left border (<span class="math notranslate nohighlight">\(x_{min}\)</span>).
+It starts with 1 µm of linear pre-plasma density, followed by
+3 µm of uniform plasma of density 492 times critical.
+The target is irradiated by a gaussian plane wave of peak intensity
+<span class="math notranslate nohighlight">\(a_0 = 270\)</span> (corresponding to <span class="math notranslate nohighlight">\(10^{23}\ \mathrm{Wcm^{-2}}\)</span>)
+and of FWHM duration 50 fs.
+The domain has a discretization of 64 cells per µm in
+both directions x and y, with 64 particles per cell.
+The same simulation has been performed with the different radiation models.</p>
+<p>Electrons can be accelerated and injected in
+the target along the density gradient through the combined action of
+the transverse electric and the magnetic fields (<em>ponderomotive</em> effects).
+In the relativistic regime and linear polarization,
+this leads to the injection of bunches of hot electrons
+every half laser period that contribute to heat the bulk.
+When these electrons reach the rear surface, they start to expand in the vacuum,
+and, being separated from the slow ion, create a longitudinal charge-separation field.
+This field, along the surface normal, has two main effects:</p>
+<ul class="simple">
+<li><p>It acts as a reflecting barrier for electrons of moderate energy (refluxing electrons).</p></li>
+<li><p>It accelerates ions located at the surface (target normal sheath acceleration, TNSA).</p></li>
+</ul>
+<p>At the front side, a charge separation cavity appears
+between the electron layer pushed forward by the ponderomotive force and ions
+left-behind that causes ions to be consequently accelerated. This
+strong ion-acceleration mechanism
+is known as the radiation pressure acceleration (RPA) or laser piston.</p>
+<p>Under the action of an extremely intense laser pulse, electrons accelerated at
+the target front radiate. It is confirmed in <a class="reference internal" href="#thin-foil-x-chi-ne"><span class="std std-numref">Fig. 28</span></a>
+showing the distribution of the quantum parameter <span class="math notranslate nohighlight">\(\chi\)</span> along the x axis
+for the Monte-Carlo, the Niel and the corrected Landau-Lifshitz (<strong>CLL</strong>) radiation models.
+The maximum values can be seen at the front where the electrons
+interact with the laser. Radiation occurs in the quantum regime
+<span class="math notranslate nohighlight">\(\chi &gt; 0.1\)</span>. Note that there is a second peak for <span class="math notranslate nohighlight">\(\chi\)</span> at the
+rear where electrons interact with the target normal sheath field.
+The radiation reaction can affect electron energy absorption and therefore the ion
+acceleration mechanisms.</p>
+<div class="figure align-default" id="id23">
+<span id="thin-foil-x-chi-ne"></span><a class="reference internal image-reference" href="_images/thin_foil_x_chi_ne.png"><img alt="_images/thin_foil_x_chi_ne.png" src="_images/thin_foil_x_chi_ne.png" style="width: 18cm;" /></a>
+<p class="caption"><span class="caption-number">Fig. 28 </span><span class="caption-text"><span class="math notranslate nohighlight">\(x - \chi\)</span> electron distribution at time 47 fs for the Monte-Carlo,
+the Niel and the corrected Landau-Lifshitz (<strong>CLL</strong>) model.</span><a class="headerlink" href="#id23" title="Permalink to this image">¶</a></p>
+</div>
+<p>The time evolutions of the electron kinetic energy, the carbon ion
+kinetic energy, the radiated energy and the total
+absorbed energy are shown in <a class="reference internal" href="#thin-foil-scalar"><span class="std std-numref">Fig. 29</span></a>.
+The <span class="green">corrected-Landau-Lifshitz</span>, the <span class="orange">Niel</span>
+and the <span class="blue">Monte-Carlo</span> models present very
+similar behaviors.
+The absorbed electron energy is only slightly lower in the Niel model.
+This difference depends on the random seeds and the
+simulation parameters.
+The radiated energy represents around 14% of the total laser energy.
+The <span class="purple">classical Landau-Lifshitz</span> model overestimates the radiated energy;
+the energy absorbed by electrons and ions is therefore slightly lower.
+In all cases, radiation reaction strongly impacts the overall particle energy absorption
+showing a difference close to 20% with the <span class="red">non-radiative</span> run.</p>
+<div class="figure align-default" id="id24">
+<span id="thin-foil-scalar"></span><a class="reference internal image-reference" href="_images/thin_foil_scalar.png"><img alt="_images/thin_foil_scalar.png" src="_images/thin_foil_scalar.png" style="width: 18cm;" /></a>
+<p class="caption"><span class="caption-number">Fig. 29 </span><span class="caption-text">Time evolution of the electron kinetic energy (solid lines), the carbon ion
+kinetic energy (dashed line), the radiated energy (dotted line) and the total
+absorbed energy by particle and radiation (dotted-dashed lines), for various models.</span><a class="headerlink" href="#id24" title="Permalink to this image">¶</a></p>
+</div>
+<p>The differences between electron <span class="math notranslate nohighlight">\(p_x\)</span> distributions are shown
+in <a class="reference internal" href="#thin-foil-x-px-ne"><span class="std std-numref">Fig. 30</span></a>. Without radiation reaction, electrons refluxing
+at the target front can travel farther in vacuum (negative <span class="math notranslate nohighlight">\(p_x\)</span>)
+before being injected back to the target.
+With radiation reaction, these electrons are rapidly slowed down
+and newly accelerated by the ponderotive force.
+Inside the target, accelerated bunches of hot electrons correspond to
+the regular positive spikes in <span class="math notranslate nohighlight">\(p_x\)</span> (oscillation at <span class="math notranslate nohighlight">\(\lambda /2\)</span>).
+The maximum electron energy is almost twice lower with radiation reaction.</p>
+<div class="figure align-default" id="id25">
+<span id="thin-foil-x-px-ne"></span><a class="reference internal image-reference" href="_images/thin_foil_x_px_ne.png"><img alt="_images/thin_foil_x_px_ne.png" src="_images/thin_foil_x_px_ne.png" style="width: 18cm;" /></a>
+<p class="caption"><span class="caption-number">Fig. 30 </span><span class="caption-text"><span class="math notranslate nohighlight">\(x - p_x\)</span> electron distribution at time 47 fs for the Monte-Carlo,
+the Niel, the corrected Landau-Lifshitz (<strong>CLL</strong>) model and
+without radiation loss (<strong>none</strong>).</span><a class="headerlink" href="#id25" title="Permalink to this image">¶</a></p>
+</div>
+</div>
+</div>
+<hr class="docutils" />
+<div class="section" id="performances">
+<h2>Performances<a class="headerlink" href="#performances" title="Permalink to this headline">¶</a></h2>
+<p>The cost of the different models is summarized in <a class="reference internal" href="#radiationtimes"><span class="std std-numref">Table 2</span></a>.
+Reported times are for the field projection, the particle pusher and
+the radiation reaction together. Percentages correspond to the overhead induced by
+the radiation module in comparison to the standard PIC pusher.</p>
+<p>All presented numbers are not generalizable and are only indicated to give
+an idea of the model costs. The creation of macro-photons is not enabled for
+the Monte-Carlo radiation process.</p>
+<table class="docutils align-default" id="radiationtimes">
+<colgroup>
+<col style="width: 36%" />
+<col style="width: 12%" />
+<col style="width: 10%" />
+<col style="width: 13%" />
+<col style="width: 10%" />
+<col style="width: 20%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Radiation model</p></th>
+<th class="head"><p>None</p></th>
+<th class="head"><p>LL</p></th>
+<th class="head"><p>CLL</p></th>
+<th class="head"><p>Niel</p></th>
+<th class="head"><p>MC</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Counter-propagating Plane Wave 1D
+Haswell (Jureca)</p></td>
+<td><p>0.2s</p></td>
+<td><p>0.23s</p></td>
+<td><p>0.24s</p></td>
+<td><p>0.26s</p></td>
+<td><p>0.3s</p></td>
+</tr>
+<tr class="row-odd"><td><p>Synchrotron 2D Haswell (Jureca)
+<span class="math notranslate nohighlight">\(\chi=0.05\)</span>,  <span class="math notranslate nohighlight">\(B=100\)</span></p></td>
+<td><p>10s</p></td>
+<td><p>11s</p></td>
+<td><p>12s</p></td>
+<td><p>14s</p></td>
+<td><p>15s</p></td>
+</tr>
+<tr class="row-even"><td><p>Synchrotron 2D Haswell (Jureca)
+<span class="math notranslate nohighlight">\(\chi=0.5\)</span>,  <span class="math notranslate nohighlight">\(B=100\)</span></p></td>
+<td><p>10s</p></td>
+<td><p>11s</p></td>
+<td><p>12s</p></td>
+<td><p>14s</p></td>
+<td><p>22s</p></td>
+</tr>
+<tr class="row-odd"><td><p>Synchrotron 2D KNL (Frioul)
+<span class="math notranslate nohighlight">\(\chi=0.5\)</span>,  <span class="math notranslate nohighlight">\(B=100\)</span></p></td>
+<td><p>21s</p></td>
+<td><p>23s</p></td>
+<td><p>23s</p></td>
+<td><p>73s</p></td>
+<td><p>47s</p></td>
+</tr>
+<tr class="row-even"><td><p>Interaction with a carbon thin foil
+2D Sandy Bridge (Poincare)</p></td>
+<td><p>6.5s</p></td>
+<td><p>6.5s</p></td>
+<td><p>6.6s</p></td>
+<td><p>6.8s</p></td>
+<td><p>6.8s</p></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 39%" />
+<col style="width: 13%" />
+<col style="width: 11%" />
+<col style="width: 15%" />
+<col style="width: 22%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Radiation model</p></th>
+<th class="head"><p>None</p></th>
+<th class="head"><p>LL</p></th>
+<th class="head"><p>CLL</p></th>
+<th class="head"><p>MC</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Counter-propagating Plane Wave 1D</p></td>
+<td><p>0.25s</p></td>
+<td><p>0.3s</p></td>
+<td><p>0.32s</p></td>
+<td><p>0.63s</p></td>
+</tr>
+<tr class="row-odd"><td><p>Synchrotron 2D Haswell
+<span class="math notranslate nohighlight">\(\chi=0.5\)</span>,  <span class="math notranslate nohighlight">\(B=100\)</span></p></td>
+<td><p>3.9s</p></td>
+<td><p>4.2s</p></td>
+<td><p>4.7s</p></td>
+<td><p>5.6s</p></td>
+</tr>
+<tr class="row-even"><td><p>Synchrotron 2D KNL
+<span class="math notranslate nohighlight">\(\chi=0.5\)</span>,  <span class="math notranslate nohighlight">\(B=100\)</span></p></td>
+<td><p>3s</p></td>
+<td><p>3.2s</p></td>
+<td><p>3.3s</p></td>
+<td><p>10s</p></td>
+</tr>
+<tr class="row-odd"><td><p>Interaction with a carbon thin foil
+2D</p></td>
+<td><p>6.5s</p></td>
+<td><p>6.5s</p></td>
+<td><p>6.6s</p></td>
+<td><p>6.8s</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<p>Descriptions of the cases:</p>
+<ul class="simple">
+<li><p><strong>Counter-propagating Plane Wave 1D</strong>: run on a single node of <em>Jureca</em> with 2 MPI ranks and 12 OpenMP
+threads per rank.</p></li>
+<li><p><strong>Synchrotron 2D</strong>: The domain has a dimension of 496x496 cells with
+16 particles per cell and 8x8 patches.
+A 4th order B-spline shape factor is used for the projection.
+The first case has been run on a single Haswell node of <em>Jureca</em> with 2 MPI ranks and
+12 OpenMP threads per rank. the second one has been run on a single KNL node of <em>Frioul</em>
+configured in quadrant cache using 1 MPI rank and 64 OpenMP threads.
+On KNL, the <code class="docutils literal notranslate"><span class="pre">KMP_AFFINITY</span></code> is set to <code class="docutils literal notranslate"><span class="pre">fine</span></code> and <code class="docutils literal notranslate"><span class="pre">scatter</span></code>.</p></li>
+</ul>
+<blockquote>
+<div><p>Only the Niel model provides better performance with a <code class="docutils literal notranslate"><span class="pre">compact</span></code> affinity.</p>
+</div></blockquote>
+<ul class="simple">
+<li><p><strong>Thin foil 2D</strong>:
+The domain has a discretization of 64 cells per <span class="math notranslate nohighlight">\(\mu\mathrm{m}\)</span> in
+both directions, with 64 particles per cell.
+The case is run on 16 nodes of <em>Poincare</em> with 2 MPI ranks and 8 OpenMP
+threads per rank.</p></li>
+</ul>
+<p>The LL and CLL models are vectorized efficiently.
+These radiation reaction models represent a small overhead
+to the particle pusher.</p>
+<p>The Niel model implementation is split into several loops to
+be partially vectorized. The table lookup is the only phase that
+can not be vectorized. Using a fit function enables to have a fully
+vectorized process. The gain depends on the order of the fit.
+The radiation process with the Niel model is dominated
+by the normal distribution random draw.</p>
+<p>The Monte-Carlo pusher is not vectorized because the Monte-Carlo loop has
+not predictable end and contains many if-statements.
+When using the Monte-Carlo radiation model, code performance is likely to be
+more impacted running on SIMD architecture with large vector registers
+such as Intel Xeon Phi processors. This can be seen in <a class="reference internal" href="#radiationtimes"><span class="std std-numref">Table 2</span></a>
+in the synchrotron case run on KNL.</p>
+</div>
+<hr class="docutils" />
+<div class="section" id="references">
+<h2>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
+<dl class="citation">
+<dt class="label" id="duclous2011"><span class="brackets">Duclous2011</span><span class="fn-backref">(<a href="#id4">1</a>,<a href="#id10">2</a>)</span></dt>
+<dd><p><a class="reference external" href="http://stacks.iop.org/0741-3335/53/i=1/a=015009">R. Duclous, J. G. Kirk, and A. R. Bell (2011), Plasma Physics and Controlled Fusion, 53 (1), 015009</a></p>
+</dd>
+<dt class="label" id="elkina2011"><span class="brackets"><a class="fn-backref" href="#id3">Elkina2011</a></span></dt>
+<dd><p><a class="reference external" href="https://journals.aps.org/prab/abstract/10.1103/PhysRevSTAB.14.054401">Elkina N. V., A. M. Fedotov, I. Y. Kostyukov, M. V. Legkov, N. B. Narozhny, E. N. Nerush, and H. Ruhl (2011), Physical Review Accelerators and Beam, 14, 054401</a></p>
+</dd>
+<dt class="label" id="landau1947"><span class="brackets">Landau1947</span><span class="fn-backref">(<a href="#id1">1</a>,<a href="#id7">2</a>)</span></dt>
+<dd><p><a class="reference external" href="https://archive.org/details/TheClassicalTheoryOfFields">L. D. Landau and E. M. Lifshitz, The classical theory of fields. Butterworth-Heinemann (1947)</a></p>
+</dd>
+<dt class="label" id="lobet2013"><span class="brackets">Lobet2013</span><span class="fn-backref">(<a href="#id5">1</a>,<a href="#id11">2</a>)</span></dt>
+<dd><p><a class="reference external" href="http://iopscience.iop.org/article/10.1088/1742-6596/688/1/012058">Lobet et al., J. Phys.: Conf. Ser. 688, 012058 (2016)</a></p>
+</dd>
+<dt class="label" id="lobet2015"><span class="brackets">Lobet2015</span><span class="fn-backref">(<a href="#id12">1</a>,<a href="#id13">2</a>)</span></dt>
+<dd><p><a class="reference external" href="http://www.theses.fr/2015BORD0361#">M. Lobet, Effets radiatifs et d’électrodynamique quantique dans l’interaction laser-matière ultra-relativiste (2015)</a></p>
+</dd>
+<dt class="label" id="ritus1985"><span class="brackets"><a class="fn-backref" href="#id8">Ritus1985</a></span></dt>
+<dd><p><a class="reference external" href="https://doi.org/10.1007/BF01120220">Ritus V. (1985), Journal of Soviet Laser Research, 6, 497, ISSN 0270-2010</a></p>
+</dd>
+<dt class="label" id="timokhin2010"><span class="brackets"><a class="fn-backref" href="#id2">Timokhin2010</a></span></dt>
+<dd><p><a class="reference external" href="https://doi.org/10.1111/j.1365-2966.2010.17286.x">Timokhin A. N. (2010), Monthly Notices of the Royal Astronomical Society, 408 (4), 2092, ISSN 1365-2966</a></p>
+</dd>
+<dt class="label" id="ridgers2017"><span class="brackets"><a class="fn-backref" href="#id15">Ridgers2017</a></span></dt>
+<dd><p><a class="reference external" href="https://doi.org/10.1017/S0022377817000642">Ridgers, C. P., Blackburn, T. G., Del Sorbo, D., Bradley, L. E., Slade-Lowther, C., Baird, C. D., … &amp; Thomas, A. G. R. (2017), Journal of Plasma Physics, 83(5)</a></p>
+</dd>
+</dl>
+</div>
+</div>
+
+
+        </div></div>
+    </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      <div>
+      <a href="site.html">Site index</a>
+      </div>
+      <div>
+        Last updated on Jul 30, 2019
+      </div>
+      
+      <div>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.1.2</a>
+      </div>
+      
+    </div>
+    
+    <script type="text/javascript">
+        
+        var nav = document.getElementById("nav");
+        var nav_list = document.getElementById("nav_list");
+        var nav_button = document.getElementById("nav_button");
+        var smallScreenMenu = document.getElementById("smallScreenMenu");
+        var smallScreenMenuButton = document.getElementById("smallScreenMenuButton");
+        var searchicon = document.getElementById("searchicon");
+        var searchbox  = document.getElementById("searchbox");
+        var searchinput= document.getElementById("searchinput");
+        var menus = document.getElementsByClassName("menu");
+        for( var i=0; i<menus.length; i++ )
+            menus[i].active = false;
+        
+        
+        var ul = nav_list.getElementsByTagName("ul")[0], li;
+        var keep_nav = false;
+        if( ul ) {
+            li = ul.firstElementChild;
+            if( li ) {
+                if( li.getElementsByTagName("ul").length > 0 ) keep_nav = true;
+            }
+        }
+        if( keep_nav ) {
+            li.removeChild( li.firstElementChild );
+        } else {
+            document.getElementById("nav_positioner").removeChild( document.getElementById("nav") );
+        }
+        
+        function navOff() {
+            nav_list.style.display = "none";
+            nav_button.className = "";
+            nav.style.overflowY = "visible";
+        }
+        
+        function toggleNav() {
+            for( var i=0; i<menus.length; i++ )
+                menuOff( menus[i] );
+            if( nav_list.style.display != "inline-block" ) {
+                nav_list.style.display = "inline-block";
+                nav_button.className = "pushed";
+                nav.style.overflowY = "auto";
+            } else {
+                navOff();
+            }
+        }
+        
+        function toggleSmallScreenMenu(e) {
+            e.preventDefault();
+            if( smallScreenMenu.className != "on" ) {
+                smallScreenMenu.className = "on";
+                smallScreenMenuButton.className = "pushed";
+            } else {
+                smallScreenMenu.className = "off";
+                smallScreenMenuButton.className = "";
+            }
+        }
+        
+        function prepareMenu(menu_id) {
+            var menu = document.getElementById(menu_id);
+            menu.timer1 = setTimeout(function(a){ return function(){thisMenuOnly(a)};}(menu_id), 100);
+            menu.addEventListener("mouseleave", function(a){ return function(){clearTimeout(a.timer1)};}(menu) );
+        }
+        
+        function leaveMenu(menu_id, source) {
+            var menu = document.getElementById(menu_id);
+            menu.timer2 = setTimeout(function(a){ return function(){menuOff(a)};}(menu), 1000);
+            source.addEventListener("mouseenter", function(a){ return function(){clearTimeout(a.timer2)};}(menu) );
+        }
+        
+        function menuOn( menu ) {
+            var divs = menu.getElementsByTagName("div");
+            if(nav_list) navOff();
+            divs[1].className = "on";
+            divs[0].className = "menuButton pushed";
+            menu.active = true;
+        }
+        function menuOff( menu ) {
+            var divs = menu.getElementsByTagName("div");
+            divs[1].className = "off";
+            divs[0].className = "menuButton";
+            menu.active = false;
+        }
+        
+        function thisMenuOnly(menu_id) {
+            var menu = document.getElementById(menu_id);
+            for( var i=0; i<menus.length; i++ )
+                if( i!=menu_id )
+                    menuOff( menus[i] );
+            menuOn( menu );
+        }
+        
+        function toggleMenu(menu_id) {
+            var menu = document.getElementById(menu_id);
+            if( menu.active ) {
+                menuOff( menu );
+            } else {
+                for( var i=0; i<menus.length; i++ )
+                    if( i!=menu_id )
+                        menuOff( menus[i] );
+                menuOn( menu );
+            }
+        }
+        
+        function openSearch() {
+            for( var i=0; i<menus.length; i++ ) {
+                menuOff( menus[i] );
+                menus[i].style.zIndex = "-1";
+            }
+            searchicon.style.display = "none";
+            closesearchicon.style.display = "block";
+            searchbox.style.display = "block";
+            searchinput.focus();
+        }
+        
+        function closeSearch() {
+            searchicon.style.display = "block";
+            closesearchicon.style.display = "none";
+            searchbox .style.display = "none";
+            for( var i=0; i<menus.length; i++ )
+                menus[i].style.zIndex = "0";
+        }
+        
+        
+        var documentDiv = document.getElementsByClassName("document")[0];
+        documentDiv.addEventListener('click', function (event) {
+            if(nav_list) navOff();
+            for( var i=0; i<menus.length; i++ )
+                menuOff( menus[i] );
+        });
+    </script>
+  </body>
+</html>
