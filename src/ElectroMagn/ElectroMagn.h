@@ -122,6 +122,15 @@ public:
     
     //! z-component of the total charge current
     Field *Jz_;
+
+    //! x-component of the total magnetic charge current
+    Field *Jmx_;
+    
+    //! y-component of the total magnetic charge current
+    Field *Jmy_;
+    
+    //! z-component of the total magnetic charge current
+    Field *Jmz_;
     
     //! Total charge density
     Field *rho_;

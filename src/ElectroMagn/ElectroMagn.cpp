@@ -110,6 +110,9 @@ void ElectroMagn::initElectroMagnQuantities()
     Jy_=NULL;
     Jz_=NULL;
     rho_=NULL;
+    Jmx_=NULL;
+    Jmy_=NULL;
+    Jmz_=NULL;
     Env_A_abs_=NULL;
     Env_Chi_  =NULL;
     Env_E_abs_=NULL;
@@ -156,6 +159,9 @@ void ElectroMagn::finishInitialization( int nspecies, Patch *patch )
     allFields.push_back( Jy_ );
     allFields.push_back( Jz_ );
     allFields.push_back( rho_ );
+    allFields.push_back( Jmx_ );
+    allFields.push_back( Jmy_ );
+    allFields.push_back( Jmz_ );
     if( Env_A_abs_ != NULL ) {
         allFields.push_back( Env_A_abs_ );
         allFields.push_back( Env_Chi_ );
@@ -220,6 +226,16 @@ ElectroMagn::~ElectroMagn()
     }
     if( rho_ != NULL ) {
         delete rho_;
+    }
+
+    if( Jmx_ != NULL ) {
+        delete Jmx_;
+    }
+    if( Jmy_ != NULL ) {
+        delete Jmy_;
+    }
+    if( Jmz_ != NULL ) {
+        delete Jmz_;
     }
     
     if( Env_A_abs_ != NULL ) {
@@ -379,6 +395,10 @@ void ElectroMagn::restartRhoJ()
     Jy_ ->put_to( 0. );
     Jz_ ->put_to( 0. );
     rho_->put_to( 0. );
+
+    Jmx_ ->put_to( 0. );
+    Jmy_ ->put_to( 0. );
+    Jmz_ ->put_to( 0. );
 }
 
 void ElectroMagn::restartEnvChi()

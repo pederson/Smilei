@@ -180,6 +180,10 @@ void ElectroMagn2D::initElectroMagn2DQuantities( Params &params, Patch *patch )
     Jy_   = new Field2D( dimPrim, 1, false, "Jy" );
     Jz_   = new Field2D( dimPrim, 2, false, "Jz" );
     rho_  = new Field2D( dimPrim, "Rho" );
+
+    Jmx_   = new Field2D( dimPrim, 0, false, "Jmx" );
+    Jmy_   = new Field2D( dimPrim, 1, false, "Jmy" );
+    Jmz_   = new Field2D( dimPrim, 2, false, "Jmz" );
     
     if( params.is_pxr == true ) {
         rhoold_ = new Field2D( dimPrim, "Rho" );
@@ -1094,6 +1098,12 @@ Field *ElectroMagn2D::createField( string fieldname )
         return new Field2D( dimPrim, 1, false, fieldname );
     } else if( fieldname.substr( 0, 2 )=="Jz" ) {
         return new Field2D( dimPrim, 2, false, fieldname );
+    } else if( fieldname.substr( 0, 2 )=="Jmx" ) {
+        return new Field2D( dimPrim, 0, false, fieldname );
+    } else if( fieldname.substr( 0, 2 )=="Jmy" ) {
+        return new Field2D( dimPrim, 1, false, fieldname );
+    } else if( fieldname.substr( 0, 2 )=="Jmz" ) {
+        return new Field2D( dimPrim, 2, false, fieldname );
     } else if( fieldname.substr( 0, 3 )=="Rho" ) {
         return new Field2D( dimPrim, fieldname );
     } else if( fieldname.substr( 0, 9 )=="Env_A_abs" ) {
@@ -1336,6 +1346,12 @@ void ElectroMagn2D::initAntennas( Patch *patch )
             antennas[i].field = new Field2D( dimPrim, 1, false, "Jy" );
         } else if( antennas[i].fieldName == "Jz" ) {
             antennas[i].field = new Field2D( dimPrim, 2, false, "Jz" );
+        } else if( antennas[i].fieldName == "Jmx" ) {
+            antennas[i].field = new Field2D( dimPrim, 0, false, "Jmx" );
+        } else if( antennas[i].fieldName == "Jmy" ) {
+            antennas[i].field = new Field2D( dimPrim, 1, false, "Jmy" );
+        } else if( antennas[i].fieldName == "Jmz" ) {
+            antennas[i].field = new Field2D( dimPrim, 2, false, "Jmz" );
         }
         
         if( antennas[i].field ) {

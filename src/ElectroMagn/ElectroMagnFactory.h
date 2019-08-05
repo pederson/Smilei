@@ -113,8 +113,9 @@ public:
             if( !PyTools::extract( "field", antenna.fieldName, "Antenna", n_antenna ) ) {
                 ERROR( "Antenna #"<<n_antenna<<": parameter 'field' not provided'" );
             }
-            if( antenna.fieldName != "Jx" && antenna.fieldName != "Jy" && antenna.fieldName != "Jz" ) {
-                ERROR( "Antenna #"<<n_antenna<<": parameter 'field' must be one of Jx, Jy, Jz" );
+            if( antenna.fieldName != "Jx" && antenna.fieldName != "Jy" && antenna.fieldName != "Jz" 
+            &&  antenna.fieldName != "Jmx" && antenna.fieldName != "Jmy" && antenna.fieldName != "Jmz") {
+                ERROR( "Antenna #"<<n_antenna<<": parameter 'field' must be one of Jx, Jy, Jz, Jmx, Jmy, Jmz" );
             }
             
             // Extract the space profile
